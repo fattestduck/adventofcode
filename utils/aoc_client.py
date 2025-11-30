@@ -26,10 +26,15 @@ def pushd(path: Path):
 class AocClient:
     BASE_URL = "https://adventofcode.com"
     SESSION_FILE = Path(".aoc_session")
+    USER_AGENT = "AocClient/1.0 (+https://github.com/henriupton99/AdventOfCode)"
 
     def __init__(self, session_token: str):
         self.session = requests.Session()
         self.session.cookies.set("session", session_token)
+        self.session.headers.update({
+            "User-Agent": self.USER_AGENT,
+            "X-AocClient": "AocClient-Python"
+        })
         self.session_token = session_token
 
     # ===========================================================
