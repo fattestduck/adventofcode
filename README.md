@@ -6,84 +6,39 @@ Repository dedicated to the [Advent Of Code yearly challenge (AOC)](https://adve
 
 You have access to two executables in order to collect the daily problem automatically, and run you solutions too.
 
-### 1.1. Installation of the virtual environment
+### 1.1. Virtual environment
 
-In order to reproduce the scripts, you will need to initialize the *poetry* environment associated to the project :
+In order to use this toolkit, you will need to retrieve the dependencies of the project. The latter is using the dependencies manager [*uv*](https://docs.astral.sh/uv/guides/install-python/). It is also possible to retrieve the dependencies manually by using the [requirements.txt file](./requirements.txt).
 
 ```shell
-# install poetry
-pip3 install poetry
-# restore environment from .lock file
-poetry install
-# activate the environment
-poetry shell
+pip3 install uv
 ```
 
-If you do not wish to proceed like this, please just install the packages *requests* and *bs4* on your device wrt the following versions: 
+### 1.2. Retrieve the daily problem
 
 ```shell
-bs4 = "^0.0.2"
-requests = "^2.32.3"
-```
-
-### 1.2. Retrieval of the daily problem
-
-For example, the following command : 
-
-```shell
-#./collect day year
-./collect 1 2024
+uv run main.py collect -d 1 -y 2025
 ```
 
 allows to retrieve all the content associated to day 1 of year 2024 : 
-- *day_desc.md* : explanation of the given day problem
+- *README.md* : explanation of the given day problem
 - *test_input.txt* : test input to validate your solution
 - *real_input.txt* : final input to produce your final submission
 - *solution.py* : python script template to fill with the solution
 
-During your first query, the script will ask for your session token in order to download the input file. To get you session token, you need to follow the following steps :
-- go to the website and inspect page (keep it open)
-- go to the "network" section in the inspector
-- login and click to "login" request in the inspector (left side)
-- check for subsection "cookies" in the "network" section in inspector (right side)
-- get the "session" value and paste it in the terminal
+During your first query, the script will ask for your session token in order to download the input file (it will then be stored in the file named *.aoc_session* for the future commands). To get your session token 
+* 1. Go to AOC official website (https://adventofcode.com/) and login to your personnal account                                              │
+* 2. Inspect the webpage using your browser (e.g Firefox, Google)                                                                            │
+* 3. Go to section 'Network', then refresh the page                                                                                          │
+* 4. Check the first 'GET' item and the argument 'Cookie' (must be the pattern :session=<your_session_token>) 
 
-Your session token will automatically be saved in the hidden cache file *.session_cache.lock*
-
-### 1.3. Run of your solution 
-
-For example, the following command :
+### 1.3. Run your solution 
 
 ```shell
-#./submit day year part(1/2) test_mode(true/false)
-./submit 1 2024 1 true
+uv run main.py run -d 1 -y 2025 -p 1 -t true
 ```
 
 will run you **solution.py** and collect the answer for **part 1** (third argument) for **test mode set to true** (fourth argument). 
-
-### 1.4. Test of your solution 
-
-For example, the following command :
-
-```shell
-#./test day year
-./test 1 2024
-```
-
-will run tests for **day 1** (first argument) for **year 2024** (second argument), based on an expected output given in the day description that you need to insert in the variable **expected_output** of the file [test_day_3.py](./tests/2024/test_day_3.py):
-
-```python
-import subprocess
-expected_output = {'1':"EXEPCTED SOLUTION FOR PART 1", '2':"EXEPCTED SOLUTION FOR PART 2"}
-day = '...'
-year = '...'
-
-def test_solution():
-  for part in ['1','2']:
-    command = ['./submit', day, year, part, 'true']
-    result = subprocess.run(command, stdout=subprocess.PIPE, text=True, check=True)
-    assert result.stdout == f'Result for Part=={part} & Test==True : {expected_output[part]}\n'
-```
 
 ## 2. What did I learn from the past ?
 

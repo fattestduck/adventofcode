@@ -7,7 +7,7 @@ class Solution:
   
   @staticmethod
   def get_nums(string: str) -> list[int]:
-    return list(map(int, re.findall('[-+]?\d+', string)))
+    return list(map(int, re.findall(r'[-+]?\d+', string)))
   
   def __init__(self, test=False):
     self.filename = self.filename_test_input if test else self.filename_real_input
@@ -28,4 +28,3 @@ if __name__ == '__main__':
   test = True if args.test in ['True','true'] else False
   solution = Solution(test=test)
   result = solution.part1() if args.part == 1 else solution.part2()
-  print(f'Result for Part=={args.part} & Test=={test} : {result}')
