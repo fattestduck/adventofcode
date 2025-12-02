@@ -1,6 +1,5 @@
 import argparse
 import re
-from math import floor, ceil
 
 class Solution:
   filename_real_input = 'real_input.txt'
@@ -14,39 +13,13 @@ class Solution:
     self.filename = self.filename_test_input if test else self.filename_real_input
     self.file = open(self.filename,'r').read()
     self.lines = self.file.splitlines()
-    self.dirs_map = {"L":-1, "R":1}
-    self.instructions = [(self.dirs_map[instr[0]], int(instr[1:])) for instr in self.lines]
-    self.pos = 50
     
   def part1(self):
-    n_zeroes = 0
-    for sign, steps in self.instructions:
-      steps *= sign
-      self.pos += steps
-      self.pos = self.pos % 100
-      if self.pos == 0:
-        n_zeroes += 1
-    return n_zeroes
+    
+    pass
   
   def part2(self):
-    n_zeroes = 0
-    for sign, steps in self.instructions:
-      # go right
-      if sign == 1:
-        for _ in range(steps):
-          self.pos += 1
-          self.pos %= 100
-          if self.pos == 0:
-            n_zeroes += 1
-      # go left
-      elif sign == -1:
-        for _ in range(steps):
-          self.pos -= 1
-          if self.pos < 0:
-            self.pos += 100
-          if self.pos == 0:
-            n_zeroes += 1
-    return n_zeroes
+    pass
   
 if __name__ == '__main__':
   parser = argparse.ArgumentParser('Solution file')
