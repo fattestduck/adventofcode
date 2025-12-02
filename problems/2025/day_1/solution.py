@@ -14,11 +14,77 @@ class Solution:
     self.file = open(self.filename,'r').read()
     self.lines = self.file.splitlines()
     
+  def incr(self, pos: int, n: int) -> int:
+    for i in range(n):
+      pos += 1
+      if pos > 99:
+        pos = 0
+    return pos
+
+  def decr(self, pos: int, n: int) -> int:
+    for i in range(n):
+      pos -= 1
+      if pos < 0:
+        pos = 99
+    return pos
+
+  def incr2(self, pos: int, n: int) -> [int, int]:
+    zeroes = 0
+    for i in range(n):
+      pos += 1
+      if pos > 99:
+        pos = 0
+        
+      if pos == 0:
+        zeroes += 1
+    return [pos, zeroes]
+
+  def decr2(self, pos: int, n: int) -> [int, int]:
+    zeroes = 0
+    for i in range(n):
+      pos -= 1
+      if pos < 0:
+        pos = 99
+
+      if pos == 0:
+        zeroes += 1
+
+    return [pos, zeroes]
+
   def part1(self):
-    
+    pos = 50
+    count = 0
+    for line in self.lines:
+      d = line[0:1]
+      n = int(line[1:])
+      
+      if d == 'L':
+        pos = self.decr(pos, n)
+      elif d == 'R':
+        pos = self.incr(pos, n)
+      print(pos)
+      if pos == 0: 
+        count += 1
+        
+    return count
+      
     pass
   
   def part2(self):
+    pos = 50
+    count = 0
+    for line in self.lines:
+      d = line[0:1]
+      n = int(line[1:])
+      zeroes = 0
+      if d == 'L':
+        [pos, zeroes] = self.decr2(pos, n)
+      elif d == 'R':
+        [pos, zeroes] = self.incr2(pos, n)
+      #print(pos)
+      count += zeroes
+        
+    return count
     pass
   
 if __name__ == '__main__':
