@@ -48,16 +48,70 @@ class Solution:
     pass
   
   def part2(self):
-    fresh = set()
+    ranges = set()
+    lines = []
     for line in self.lines:
       if line == '':
         break
       start, end = line.split('-')
-      rng = range(int(start), int(end)+1)
-      for n in rng:
-        fresh.add(n)
-    return len(fresh)
-    pass
+      start = int(start)
+      end = int(end)
+      lines.append((start, end))
+
+    slines = sorted(lines)
+    sorted_lines = list(dict.fromkeys(slines))
+
+    print(sorted_lines)
+    #return
+    fresh = set()
+
+    highest = 0
+    for x, rc in enumerate(sorted_lines):
+      print("x: " + str(x))
+      # if x != 0 and x <= y_tracker:
+      #   print("skipping")
+      #   continue
+
+      start_c = rc[0]
+      end_c = rc[1]
+      print("currently testing: " + str(rc[0]) + "," +str(rc[1]))
+      rng_start = start_c
+      rng_end = end_c
+      
+      if rng_end <= highest:
+        print("skipping")
+        continue
+
+      for y, rn in enumerate(sorted_lines[x+1:]):
+        #print("y: " + str(y+x+1))
+        #y_tracker = y+x+1
+        start_n = rn[0]
+        end_n = rn[1]
+
+        if start_n > rng_end or end_n <= rng_end:
+          continue
+        else:
+          rng_end = end_n
+
+
+      print("adding:")
+      print((rng_start, rng_end))
+      fresh.add((rng_start, rng_end))
+      highest = rng_end
+
+    #print(sorted_lines)
+
+    cum = 0
+    print(fresh)
+    for f in fresh:
+      cum += f[1]-f[0]+1
+
+    return cum
+
+
+
+    
+
   
 if __name__ == '__main__':
   parser = argparse.ArgumentParser('Solution file')
