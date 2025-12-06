@@ -1,5 +1,7 @@
 import argparse
+import math
 import re
+import numpy as np
 
 class Solution:
   filename_real_input = 'real_input.txt'
@@ -15,9 +17,76 @@ class Solution:
     self.lines = self.file.splitlines()
     
   def part1(self):
+    operators = self.lines.pop().replace(" ","")
+
+    cum = 0
+    #print(operators)
+    problems = []
+
+    for line in self.lines:
+      number_strs = line.split()
+      numbers = [int(s) for s in number_strs]
+      problems.append(numbers)
+
+    matrix = np.array(problems)
+    
+    for pid, operator in enumerate(operators):
+      col = matrix[:, pid]
+
+      result = 0
+      if operator == '*':
+        result = math.prod(col)
+      elif operator == '+':
+        result = sum(col)
+
+      cum += result
+
+    return cum
     pass
   
   def part2(self):
+    operators = self.lines.pop().replace(" ","")
+    cum = 0
+    result = 0
+    str_matrix = []
+    for line in self.lines:
+      str_matrix.append(list(line))
+    matrix = np.array(str_matrix)
+
+    n = len(self.lines[0])-1
+    for operator in reversed(operators):
+      print("operator: " + operator)
+      result = 0
+      while True:
+        if n < 0:
+          break
+        col = matrix[:,n]
+        num_str = ""
+        for c in col:
+          if c != ' ':
+            num_str += c
+
+        if num_str == '':
+          n = n - 1
+          break
+        else:
+          num = int(num_str)
+          print("doing num " + str(num))
+          if operator == '*':
+            if result == 0:
+              result = num
+            else:
+              result = result * num
+          elif operator == '+':
+            result = result + num
+        n = n - 1
+      print("found result: " + str(result))
+      cum += result
+    return cum
+
+
+    
+
     pass
   
 if __name__ == '__main__':
