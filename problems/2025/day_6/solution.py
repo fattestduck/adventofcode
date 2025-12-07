@@ -2,6 +2,7 @@ import argparse
 import math
 import re
 import numpy as np
+import itertools
 
 class Solution:
   filename_real_input = 'real_input.txt'
@@ -17,6 +18,30 @@ class Solution:
     self.lines = self.file.splitlines()
     
   def part1(self):
+    #self.lines.pop()
+    #arr = np.array([list(row) for row in self.lines]).transpose()
+    #print(arr)
+    #return
+    #z = zip(self.lines)
+    #print(list(z))
+    # self.lines.pop()
+
+    # z = [list(nums) for blank, nums in itertools.groupby([''.join(row).strip() for row in zip(*self.lines)], bool) if blank]
+
+    # #z = zip(*self.file.splitlines())
+    # print(list(z))
+
+    #matrix = [line.split() for line in self.lines]
+    #transposed = list(zip(*matrix[::-1]))
+    #print(transposed)
+
+    #z = zip([list(row.split()) for row in self.lines])
+    #print (list(z))
+    #z = zip(self.file.split())
+    #print (list(z))
+    # return
+
+
     operators = self.lines.pop().replace(" ","")
 
     cum = 0
