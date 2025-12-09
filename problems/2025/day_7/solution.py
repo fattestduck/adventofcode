@@ -7,6 +7,7 @@ from treelib import Tree
 class Solution:
   filename_real_input = 'real_input.txt'
   filename_test_input = 'test_input.txt'
+  tree = {}
   
   @staticmethod
   def get_nums(string: str) -> list[int]:
@@ -57,8 +58,8 @@ class Solution:
 
   def part2(self):
     matrix = self.lines.copy()
-    tree = defaultdict(list)
-
+    self.tree = defaultdict(list)
+    #tree = Tree()
 
     count = 0
     for row, line in enumerate(matrix):
@@ -66,8 +67,10 @@ class Solution:
         pos = line.find('S')
         newline = line.replace('S','|')
         matrix[row] = newline
-        #root = Node((0, pos))
-        tree[(row, pos)] = []
+        root = (row, pos)
+        print(root)
+        self.tree[(root)] = []
+        #tree.create_node(root, root)
         continue
       tachs = set()
       splits = set()
@@ -77,25 +80,42 @@ class Solution:
             tachs.add(col-1)
             tachs.add(col+1)
             splits.add(col)
-            count += 1
-            #newline = line[:col-1] + '|^|' + line[col+2:]
+            #count += 1
+            newline = line[:col-1] + '|^|' + line[col+2:]
 
-            prev_node = tree[(row-1, col)]
-            left_node = tree[(row, col-1)]
-            right_node = tree[(row, col+1)]
+            prev = (row-1, col)
+            left = (row, col-1)
+            right = (row, col+1)
+
+            # if left in tree:
+            #   count += 1
+            # else:
+            #   tree.create_node(left, left, parent=prev)
+            # if right in tree:
+            #   count += 1
+            # else:
+            #   tree.create_node(right, right, parent=prev)
+
+            prev_node = self.tree[(row-1, col)]
+            left_node = self.tree[(row, col-1)]
+            right_node = self.tree[(row, col+1)]
             prev_node.append((row, col-1))
             prev_node.append((row, col+1))
-            tree[(row-1, col)] = prev_node
+            self.tree[(row-1, col)] = prev_node
 
           elif char == '.':
             #node = Node((row, col))
-            #newline = line[:col] + '|' + line[col+1:]
-            prev_node = tree[(row-1, col)]
+            newline = line[:col] + '|' + line[col+1:]
+            prev_node = self.tree[(row-1, col)]
            # print(prev_node)
-            new_node = tree[(row, col)]
+            new_node = self.tree[(row, col)]
             prev_node.append((row, col))
-            tree[(row-1, col)] = prev_node
+            self.tree[(row-1, col)] = prev_node
             tachs.add(col)
+            prev = (row-1, col)
+            down = (row, col)
+            # if down not in tree:
+            #   tree.create_node(down, down, parent=prev)
       newline = ""
       for c in range(len(line)):
         if c in tachs:
@@ -111,33 +131,40 @@ class Solution:
       print(l)
     #print(tree)
 
-    realtree = Tree()
-    root = (0,7)
-    realtree.create_node(root, root)
-    for parent, children in tree.items():
-      #print(parent)
-      #print("children:")
-      #print(children)
-      for child in children:
-        #print("child:")
+    root_node = (0, 70)
+    paths = self.count_paths_to_leaves(root_node)
+    return paths
+
+    # realtree = Tree()
+    # root = (0,7)
+    # realtree.create_node(root, root)
+    # for parent, children in tree.items():
+    #   #print(parent)
+    #   #print("children:")
+    #   #print(children)
+    #   for child in children:
+    #     #print("child:")
         
-        realtree.create_node(child, child, parent=parent)
+        # realtree.create_node(child, child, parent=parent)
 
-    #realtree.show()
-    leaves = realtree.leaves()
-    print(leaves)
-    return len(leaves)
-
+    # #realtree.show()
+    # leaves = tree.leaves()
+    # leaf_paths = tree.paths_to_leaves()
+    # #print(leaves)
+    # print(count)
+    # print(len(leaf_paths))
+    # #return len(leaves) + count
   
-  
-  # @functools.lru_cache(maxsize=None)
-  # def count_paths(self, current_node, target_node):
-  #   if current_node == target_node:
-  #     return 1
+  @functools.lru_cache(maxsize=None)
+  def count_paths_to_leaves(self, node):
+    if not self.tree[node]:
+      return 1
+    
+    total_paths = 0
+    for neighbor in self.tree[node]:
+      total_paths += self.count_paths_to_leaves(neighbor)
 
-  #   count = 0
-  #   for neighbor in self.tree.get(current_node, []):
-  #     count += self.count_paths(neighbor, target_node)
+    return total_paths
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser('Solution file')
